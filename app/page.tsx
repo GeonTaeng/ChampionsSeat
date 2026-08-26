@@ -2,13 +2,7 @@
 
 import { useRef, useState } from 'react'
 import { AppHeader } from '@/components/app-header'
-import {
-  InputSection,
-  type FormValues,
-  type FormErrors,
-  type FieldRefs,
-  parseBudget,
-} from '@/components/input-section'
+import { InputSection, type FieldRefs } from '@/components/input-section'
 import { SeatResultCard } from '@/components/seat-result-card'
 import { ResultEmptyState } from '@/components/result-empty-state'
 import { ResultLoadingState } from '@/components/result-loading-state'
@@ -23,6 +17,12 @@ import {
   type RecommendInput,
   type RecommendResult,
 } from '@/lib/recommend'
+import {
+  type FormValues,
+  type FormErrors,
+  validateForm,
+  parseBudget,
+} from '@/lib/validation'
 import { ArrowUp } from 'lucide-react'
 
 const DEFAULT_VALUES: FormValues = {
@@ -39,8 +39,8 @@ const DEFAULT_VALUES: FormValues = {
 const DEMO_INPUT: RecommendInput = {
   cheerTeam: 'home',
   visitDayType: 'weekend',
-  partySize: 3,
-  totalBudget: 200000,
+  partySize: 2,
+  totalBudget: 100000,
   prefCheer: 4,
   prefView: 3,
   prefComfort: 2,
@@ -48,7 +48,7 @@ const DEMO_INPUT: RecommendInput = {
 
 function summaryChips(input: RecommendInput): string[] {
   return [
-    input.cheerTeam === 'home' ? '홈(KIA)' : '어웨이',
+    input.cheerTeam === 'home' ? '홈 (KIA)' : '어웨이 (원정)',
     input.visitDayType === 'weekend' ? '주말·공휴일' : '평일',
     `${input.partySize}명`,
     `${input.totalBudget.toLocaleString('ko-KR')}원`,
@@ -97,27 +97,11 @@ export default function Page() {
   }
 
   const scrollToField = (ref: { current: HTMLElement | null }) => {
-    ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    // 포커스 가능한 경우 포커스
+    if (!ref.current) return
+    ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
     if (ref.current instanceof HTMLInputElement) {
-      setTimeout(() => ref.current?.focus(), 300)
+      setTimeout(() => ref.current?.focus(), 250)
     }
-  }
-
-  const validate = (): FormErrors => {
-    const e: FormErrors = {}
-    if (!values.cheerTeam) e.cheerTeam = '응원팀을 선택해주세요'
-    if (!values.visitDayType) e.visitDayType = '방문일 유형을 선택해주세요'
-    if (values.partySize < 1 || values.partySize > 40) {
-      e.partySize = '인원은 최대 40명까지 입력 가능합니다'
-    }
-    const budget = parseBudget(values.budgetRaw)
-    if (errors.budget) {
-      e.budget = errors.budget
-    } else if (budget < 1) {
-      e.budget = '1원 이상의 예산을 입력해주세요'
-    }
-    return e
   }
 
   const runRecommendation = (input: RecommendInput) => {
@@ -140,19 +124,20 @@ export default function Page() {
         setFailCount((c) => c + 1)
         setStatus('error')
       }
-    }, 800)
+    }, 600)
   }
 
   const handleSubmit = () => {
-    const e = validate()
-    if (Object.keys(e).length > 0) {
-      setErrors(e)
-      // 첫 번째 에러 필드로 스크롤/포커스
-      if (e.cheerTeam) scrollToField(cheerTeamRef)
-      else if (e.visitDayType) scrollToField(visitDayTypeRef)
-      else if (e.budget) scrollToField(budgetRef)
-      return // 검증 실패 시 기존 결과 유지
+    const formErrors = validateForm(values)
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors)
+      // PRD 5-1: 미입력된 첫 번째 필드로 자동 스크롤 & 포커스
+      if (formErrors.cheerTeam) scrollToField(cheerTeamRef)
+      else if (formErrors.visitDayType) scrollToField(visitDayTypeRef)
+      else if (formErrors.budget) scrollToField(budgetRef)
+      return // 검증 실패 시 로직 미실행 및 기존 결과 유지
     }
+
     setErrors({})
     const input: RecommendInput = {
       cheerTeam: values.cheerTeam!,
@@ -190,8 +175,6 @@ export default function Page() {
   const effectiveStatus: ResultStatus = forced ?? status
   const isLoading = effectiveStatus === 'loading'
 
-  // 표시에 사용할 입력 요약
-  // 강제(개발용) 상태에서는 샘플 입력을 사용해 카드/요약 값이 일치하도록 함
   const summaryInput =
     forced && forced !== 'empty' && forced !== 'loading'
       ? DEMO_INPUT
@@ -246,7 +229,7 @@ export default function Page() {
                 variant="outline"
                 size="lg"
                 onClick={scrollToInput}
-                className="w-full"
+                className="w-full cursor-pointer"
               >
                 <ArrowUp data-icon="inline-start" />
                 조건 바꿔서 다시 추천받기
@@ -304,7 +287,7 @@ export default function Page() {
                 )}
               </div>
               {showSummary && summaryInput && (
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-1.5 animate-in fade-in-50">
                   {summaryChips(summaryInput).map((chip, i) => (
                     <Badge key={i} variant="secondary" className="tnum">
                       {chip}
