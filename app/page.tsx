@@ -48,7 +48,7 @@ const DEMO_INPUT: RecommendInput = {
 
 function summaryChips(input: RecommendInput): string[] {
   return [
-    input.cheerTeam === 'home' ? '홈 (KIA)' : '어웨이 (원정)',
+    input.cheerTeam === 'home' ? '홈 (KIA 타이거즈)' : '어웨이 (원정팀)',
     input.visitDayType === 'weekend' ? '주말·공휴일' : '평일',
     `${input.partySize}명`,
     `${input.totalBudget.toLocaleString('ko-KR')}원`,
@@ -107,20 +107,33 @@ export default function Page() {
   const runRecommendation = (input: RecommendInput) => {
     setStatus('loading')
     setForced(null)
+
+    // PRD 5-3 타임아웃 가드 (15초 초과 시 PRD 5-4 실패 처리)
+    const timeoutId = window.setTimeout(() => {
+      setStatus('error')
+      setFailCount((c) => c + 1)
+      console.error('[Timeout] 좌석 추천 연산 시간이 15초를 초과하여 실패 처리되었습니다.')
+    }, 15000)
+
+    // 연산 실행 (자연스러운 체감을 위한 미세 지연)
     window.setTimeout(() => {
       try {
+        clearTimeout(timeoutId)
         const res = recommendSeats(input)
         setResult(res)
         setStatus(res.status)
         setFailCount(0)
+
         // 결과 영역으로 부드럽게 스크롤
         window.setTimeout(() => {
           resultRef.current?.scrollIntoView({
             behavior: 'smooth',
             block: 'start',
           })
-        }, 80)
-      } catch {
+        }, 100)
+      } catch (err) {
+        clearTimeout(timeoutId)
+        console.error('[Error] 좌석 추천 로직 오류:', err)
         setFailCount((c) => c + 1)
         setStatus('error')
       }
@@ -215,7 +228,7 @@ export default function Page() {
       case 'success':
         if (result?.status === 'success') {
           return (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 animate-in fade-in-50 duration-300">
               {result.items.map((rec, i) => (
                 <SeatResultCard
                   key={rec.zone.id}
@@ -229,9 +242,9 @@ export default function Page() {
                 variant="outline"
                 size="lg"
                 onClick={scrollToInput}
-                className="w-full cursor-pointer"
+                className="w-full cursor-pointer font-bold border-border/80 hover:bg-accent"
               >
-                <ArrowUp data-icon="inline-start" />
+                <ArrowUp data-icon="inline-start" className="size-4" />
                 조건 바꿔서 다시 추천받기
               </Button>
             </div>
@@ -279,17 +292,17 @@ export default function Page() {
           <div className="flex flex-col gap-4 md:sticky md:top-4">
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-bold tracking-tight">추천 결과</h2>
+                <h2 className="text-lg font-bold tracking-tight text-foreground">추천 결과</h2>
                 {effectiveStatus === 'success' && (
-                  <span className="text-xs font-medium text-muted-foreground">
-                    TOP 3 · 매칭 순
+                  <span className="text-xs font-semibold text-primary">
+                    TOP 3 · 맞춤 추천 순
                   </span>
                 )}
               </div>
               {showSummary && summaryInput && (
                 <div className="flex flex-wrap gap-1.5 animate-in fade-in-50">
                   {summaryChips(summaryInput).map((chip, i) => (
-                    <Badge key={i} variant="secondary" className="tnum">
+                    <Badge key={i} variant="secondary" className="tnum font-medium">
                       {chip}
                     </Badge>
                   ))}
