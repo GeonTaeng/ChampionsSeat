@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react'
 import { AppHeader } from '@/components/app-header'
 import { InputSection, type FieldRefs } from '@/components/input-section'
-import { SeatResultCard } from '@/components/seat-result-card'
+import { SeatResultCard, type AiEnhancedData } from '@/components/seat-result-card'
 import { ResultEmptyState } from '@/components/result-empty-state'
 import { ResultLoadingState } from '@/components/result-loading-state'
 import { BudgetOverState } from '@/components/budget-over-state'
@@ -64,6 +64,10 @@ export default function Page() {
   const [failCount, setFailCount] = useState(0)
   const [forced, setForced] = useState<ResultStatus | null>(null)
 
+  // Gemini AI 비동기 상태 관리
+  const [aiDataMap, setAiDataMap] = useState<Record<string, AiEnhancedData>>({})
+  const [isAiLoading, setIsAiLoading] = useState(false)
+
   const cheerTeamRef = useRef<HTMLDivElement | null>(null)
   const visitDayTypeRef = useRef<HTMLDivElement | null>(null)
   const budgetRef = useRef<HTMLInputElement | null>(null)
@@ -104,9 +108,55 @@ export default function Page() {
     }
   }
 
+  // Gemini AI 백엔드 비동기 호출
+  const fetchAiReasons = async (
+    input: RecommendInput,
+    items: RecommendResult & { status: 'success' },
+  ) => {
+    setIsAiLoading(true)
+    try {
+      const payload = items.items.map((item) => ({
+        zoneName: item.zone.zoneName,
+        blockName: item.zone.blockName,
+        cheerTeam: input.cheerTeam,
+        visitDayType: input.visitDayType,
+        partySize: input.partySize,
+        totalPrice: item.totalPrice,
+        unitPrice: item.unitPrice,
+        prefCheer: input.prefCheer,
+        prefView: input.prefView,
+        prefComfort: input.prefComfort,
+        features: item.zone.features || [],
+      }))
+
+      const response = await fetch('/api/ai-reason', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: payload }),
+      })
+
+      if (response.ok) {
+        const data = (await response.json()) as { results: (AiEnhancedData | null)[] }
+        const nextMap: Record<string, AiEnhancedData> = {}
+        data.results.forEach((res, index) => {
+          const item = items.items[index]
+          if (res && item) {
+            nextMap[item.zone.id] = res
+          }
+        })
+        setAiDataMap(nextMap)
+      }
+    } catch (err) {
+      console.warn('[Gemini AI] AI 사유 호출 실패, 룰 기반 템플릿 사유 유지:', err)
+    } finally {
+      setIsAiLoading(false)
+    }
+  }
+
   const runRecommendation = (input: RecommendInput) => {
     setStatus('loading')
     setForced(null)
+    setAiDataMap({})
 
     // PRD 5-3 타임아웃 가드 (15초 초과 시 PRD 5-4 실패 처리)
     const timeoutId = window.setTimeout(() => {
@@ -115,7 +165,7 @@ export default function Page() {
       console.error('[Timeout] 좌석 추천 연산 시간이 15초를 초과하여 실패 처리되었습니다.')
     }, 15000)
 
-    // 연산 실행 (자연스러운 체감을 위한 미세 지연)
+    // 1단계: 룰 기반 초고속 연산 (자연스러운 체감을 위한 미세 지연 후 렌더링)
     window.setTimeout(() => {
       try {
         clearTimeout(timeoutId)
@@ -124,13 +174,18 @@ export default function Page() {
         setStatus(res.status)
         setFailCount(0)
 
-        // 결과 영역으로 부드럽게 스크롤
+        // 결과 영역으로 스크롤
         window.setTimeout(() => {
           resultRef.current?.scrollIntoView({
             behavior: 'smooth',
             block: 'start',
           })
         }, 100)
+
+        // 2단계: 추천 성공 시 Gemini AI 비동기 사유 생성
+        if (res.status === 'success') {
+          fetchAiReasons(input, res)
+        }
       } catch (err) {
         clearTimeout(timeoutId)
         console.error('[Error] 좌석 추천 로직 오류:', err)
@@ -144,11 +199,10 @@ export default function Page() {
     const formErrors = validateForm(values)
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors)
-      // PRD 5-1: 미입력된 첫 번째 필드로 자동 스크롤 & 포커스
       if (formErrors.cheerTeam) scrollToField(cheerTeamRef)
       else if (formErrors.visitDayType) scrollToField(visitDayTypeRef)
       else if (formErrors.budget) scrollToField(budgetRef)
-      return // 검증 실패 시 로직 미실행 및 기존 결과 유지
+      return
     }
 
     setErrors({})
@@ -235,6 +289,8 @@ export default function Page() {
                   rec={rec}
                   rank={i}
                   partySize={summaryInput?.partySize ?? values.partySize}
+                  aiData={aiDataMap[rec.zone.id]}
+                  isAiLoading={isAiLoading}
                 />
               ))}
               <Button
@@ -294,9 +350,16 @@ export default function Page() {
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-bold tracking-tight text-foreground">추천 결과</h2>
                 {effectiveStatus === 'success' && (
-                  <span className="text-xs font-semibold text-primary">
-                    TOP 3 · 맞춤 추천 순
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-semibold text-primary">
+                      TOP 3 · 맞춤 추천 순
+                    </span>
+                    {isAiLoading && (
+                      <span className="text-[11px] text-muted-foreground animate-pulse">
+                        (AI 분석 중...)
+                      </span>
+                    )}
+                  </div>
                 )}
               </div>
               {showSummary && summaryInput && (

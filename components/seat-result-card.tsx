@@ -7,7 +7,7 @@ import { CountUp } from '@/components/count-up'
 import { ScoreGauge } from '@/components/score-gauge'
 import { formatCurrency, type SeatRecommendation } from '@/lib/recommend'
 import { cn } from '@/lib/utils'
-import { Crown, Sparkles, Tag } from 'lucide-react'
+import { Crown, Sparkles, Tag, Bot, Lightbulb, Loader2 } from 'lucide-react'
 
 const RANK_CONFIG = [
   { label: '1위', badgeClass: 'bg-amber-500 text-white font-black shadow-xs', icon: Crown },
@@ -15,14 +15,23 @@ const RANK_CONFIG = [
   { label: '3위', badgeClass: 'bg-amber-700/80 text-white font-bold', icon: null },
 ]
 
+export type AiEnhancedData = {
+  aiReason?: string
+  matchTip?: string
+}
+
 export function SeatResultCard({
   rec,
   rank,
   partySize,
+  aiData,
+  isAiLoading,
 }: {
   rec: SeatRecommendation
   rank: number
   partySize: number
+  aiData?: AiEnhancedData | null
+  isAiLoading?: boolean
 }) {
   const isBest = rank === 0
   const rankInfo = RANK_CONFIG[rank] ?? {
@@ -30,6 +39,8 @@ export function SeatResultCard({
     badgeClass: 'bg-muted text-muted-foreground font-bold',
     icon: null,
   }
+
+  const hasAiReason = !!aiData?.aiReason
 
   return (
     <Card
@@ -64,12 +75,25 @@ export function SeatResultCard({
             </Badge>
           </div>
 
-          {rec.isAwayEligible && (
-            <Badge variant="secondary" className="gap-1 font-semibold text-field bg-field/10 border-field/30">
-              <Sparkles className="size-3 text-field" />
-              원정 응원 추천
-            </Badge>
-          )}
+          <div className="flex items-center gap-1.5">
+            {rec.isAwayEligible && (
+              <Badge variant="secondary" className="gap-1 font-semibold text-field bg-field/10 border-field/30">
+                <Sparkles className="size-3 text-field" />
+                원정 응원 추천
+              </Badge>
+            )}
+            {hasAiReason ? (
+              <Badge variant="outline" className="gap-1 text-primary border-primary/40 bg-primary/5 animate-pulse">
+                <Bot className="size-3 text-primary" />
+                Gemini AI 분석
+              </Badge>
+            ) : isAiLoading ? (
+              <Badge variant="ghost" className="gap-1 text-muted-foreground text-xs">
+                <Loader2 className="size-3 animate-spin" />
+                AI 분석 중
+              </Badge>
+            ) : null}
+          </div>
         </div>
 
         {/* 구역명 & 블록명 */}
@@ -119,24 +143,49 @@ export function SeatResultCard({
           <ScoreGauge label="좌석 편의" score={rec.zone.comfortScore} emphasis={isBest} />
         </div>
 
-        {/* 추천 이유 */}
+        {/* 추천 이유 (AI 생성 사유 or 룰 기반 템플릿 사유) */}
         <div
           className={cn(
-            'rounded-xl p-3.5 text-sm leading-relaxed border',
-            isBest
-              ? 'bg-primary/5 border-primary/20 text-foreground font-medium'
-              : 'bg-muted/50 border-border/60 text-foreground/90',
+            'rounded-xl p-3.5 text-sm leading-relaxed border transition-all duration-500',
+            hasAiReason
+              ? 'bg-gradient-to-br from-primary/10 via-card to-primary/5 border-primary/30 shadow-xs'
+              : isBest
+                ? 'bg-primary/5 border-primary/20 text-foreground font-medium'
+                : 'bg-muted/50 border-border/60 text-foreground/90',
           )}
         >
-          <div className="flex items-center gap-1.5 mb-2 font-bold text-xs text-primary">
-            <Sparkles className="size-3.5" />
-            <span>AI 추천 사유</span>
+          <div className="flex items-center justify-between gap-1.5 mb-2 font-bold text-xs">
+            <div className="flex items-center gap-1.5 text-primary">
+              {hasAiReason ? <Bot className="size-4" /> : <Sparkles className="size-3.5" />}
+              <span>{hasAiReason ? 'Gemini AI 맞춤 추천 해설' : '추천 사유'}</span>
+            </div>
+            {hasAiReason && (
+              <span className="text-[10px] font-normal text-muted-foreground">Gemini 2.5 Flash</span>
+            )}
           </div>
-          {rec.reasons.map((reason, i) => (
-            <p key={i} className={cn(i > 0 && 'mt-1.5 text-muted-foreground text-xs')}>
-              {reason}
+
+          {hasAiReason ? (
+            <p className="text-foreground leading-relaxed animate-in fade-in-50 duration-500">
+              {aiData.aiReason}
             </p>
-          ))}
+          ) : (
+            rec.reasons.map((reason, i) => (
+              <p key={i} className={cn(i > 0 && 'mt-1.5 text-muted-foreground text-xs')}>
+                {reason}
+              </p>
+            ))
+          )}
+
+          {/* 직관 꿀팁 (AI 생성 시 표시) */}
+          {aiData?.matchTip && (
+            <div className="mt-3 flex items-start gap-2 rounded-lg bg-card/90 p-2.5 text-xs text-foreground border border-border/60 shadow-xs animate-in fade-in-50 duration-500">
+              <Lightbulb className="size-4 text-amber-500 shrink-0 mt-0.5" />
+              <div>
+                <span className="font-bold text-amber-600 dark:text-amber-400 mr-1">직관 TIP:</span>
+                <span>{aiData.matchTip}</span>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* 특징 태그 */}
