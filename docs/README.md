@@ -11,6 +11,7 @@
 
 | 문서명 | 경로 | 주요 내용 및 목적 | 완료 상태 |
 |:---|:---|:---|:---:|
+| **디자인 시스템 전환 계획서** | [`design_system_migration_plan.md`](./design_system_migration_plan.md) | **Tiger Strike Dynamics** (다크 테크, 타이거 레드 #C7012E, 4px 라운딩, 글래스모피즘) 적용 계획 | **대기** |
 | **마스터 개발 계획서** | [`development_plan.md`](./development_plan.md) | 시스템 아키텍처, 4단계 스프린트 로드맵, 핵심 요구사항 매핑 및 최종 빌드/테스트 요약 | **완료 (100%)** |
 | **좌석 데이터셋 명세서** | [`seat_dataset_spec.md`](./seat_dataset_spec.md) | 티켓링크 공식 기준 14개 대표 구역 가격표, 3루 홈/1루 원정 방향성, 점수 체계 및 특징 태그 명세 | **완료 (100%)** |
 | **Gemini AI 고도화 계획서** | [`ai_enhancement_plan.md`](./ai_enhancement_plan.md) | Google Gemini API 연동, 하이브리드 아키텍처, 실시간 AI 맞춤 해설 & 직관 팁 생성 계획 | **완료 (100%)** |

@@ -1,40 +1,50 @@
-import { Badge } from '@/components/ui/badge'
-import { Info, Sparkles } from 'lucide-react'
+'use client'
 
-export function AppHeader() {
+import { Button } from '@/components/ui/button'
+import { Sparkles, Compass } from 'lucide-react'
+
+export function AppHeader({ onCtaClick }: { onCtaClick?: () => void }) {
   return (
-    <header className="relative overflow-hidden bg-navy text-navy-foreground">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-40"
-        style={{
-          backgroundImage:
-            'radial-gradient(circle at 15% 20%, color-mix(in oklab, var(--primary) 45%, transparent), transparent 45%), radial-gradient(circle at 90% 0%, color-mix(in oklab, var(--field) 30%, transparent), transparent 40%)',
-        }}
-      />
-      <div className="relative mx-auto flex w-full max-w-5xl flex-col gap-5 px-5 py-10 md:px-8 md:py-14">
-        <div className="flex items-start justify-between gap-4">
-          <Badge className="gap-1 bg-primary text-primary-foreground">
-            <Sparkles className="size-3" />
-            KIA 챔피언스 필드
-          </Badge>
-          <Badge
-            variant="outline"
-            className="gap-1 border-navy-foreground/25 text-navy-foreground/80"
-          >
-            <Info className="size-3" />
-            예매 사이트 아님 · 참고용 추천
-          </Badge>
-        </div>
+    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-[#121414]/90 backdrop-blur-md shadow-md">
+      <div className="mx-auto flex h-18 max-w-[1200px] items-center justify-between px-5 md:px-8">
+        {/* 브랜드 로고 영역 (code.html 매칭) */}
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault()
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+          }}
+          className="flex items-center gap-2.5 font-black text-lg sm:text-xl text-white tracking-tight uppercase cursor-pointer"
+        >
+          <span className="flex size-8 items-center justify-center rounded-[4px] bg-[#C7012E] text-white font-black text-xs shadow-md">
+            KIA
+          </span>
+          <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#ffb3b2]">
+            Tigers Seat Scout
+          </span>
+        </a>
 
-        <div className="flex flex-col gap-3">
-          <h1 className="text-3xl font-black tracking-tight text-balance md:text-4xl">
-            오늘 어디 앉지? <span className="text-primary">3초 만에</span> 정해드려요
-          </h1>
-          <p className="max-w-xl text-sm leading-relaxed text-navy-foreground/75 md:text-base">
-            응원팀·예산·취향만 고르면 오늘 앉을 자리를 정해드려요. 복잡한 좌석표를
-            안 봐도 챔피언스 필드에서 나에게 맞는 좌석 TOP 3를 바로 확인하세요.
-          </p>
+        {/* 데스크톱 네비게이션 & CTA (code.html 매칭) */}
+        <div className="flex items-center gap-4 sm:gap-6">
+          <div className="hidden md:flex items-center space-x-6 text-xs uppercase font-bold tracking-wider text-[#e2e2e2]">
+            <span className="text-[#A0A0A0] hover:text-white transition-colors cursor-default">
+              2026 티켓링크 공식 기준
+            </span>
+            <span className="text-[#A0A0A0] hover:text-white transition-colors cursor-default">
+              Gemini 3.6 Flash 탑재
+            </span>
+          </div>
+
+          {onCtaClick && (
+            <button
+              type="button"
+              onClick={onCtaClick}
+              className="cursor-pointer bg-[#C7012E] hover:bg-[#A50126] text-white text-xs sm:text-sm font-bold uppercase px-5 sm:px-6 py-2.5 rounded-[4px] transition-all duration-300 transform active:scale-95 shadow-[0_0_15px_rgba(199,1,46,0.4)] border border-white/10 flex items-center gap-1.5"
+            >
+              <Sparkles className="size-3.5" />
+              <span>Start Scout</span>
+            </button>
+          )}
         </div>
       </div>
     </header>

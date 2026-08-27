@@ -5,22 +5,22 @@ import {
   EmptyTitle,
   EmptyDescription,
 } from '@/components/ui/empty'
-import { Ticket } from 'lucide-react'
+import { Ticket, Sparkles } from 'lucide-react'
 
 export function ResultEmptyState() {
   return (
-    <Empty className="min-h-80 border border-dashed border-border bg-card/40">
+    <Empty className="min-h-80 rounded-[4px] border border-dashed border-white/10 bg-[#1a1c1c]/60 glass-panel p-8">
       <EmptyHeader>
-        <EmptyMedia variant="icon" className="size-12 bg-primary/10 text-primary">
-          <Ticket className="size-6" />
+        <EmptyMedia variant="icon" className="size-14 rounded-[4px] bg-[#C7012E]/15 text-[#C7012E] border border-[#C7012E]/30">
+          <Ticket className="size-7" />
         </EmptyMedia>
-        <EmptyTitle className="text-base">
-          아직 추천 좌석이 없어요
+        <EmptyTitle className="text-lg font-bold text-white mt-3">
+          아직 추천 좌석이 생성되지 않았어요
         </EmptyTitle>
-        <EmptyDescription>
-          왼쪽에서 응원팀·예산·취향을 고르고
+        <EmptyDescription className="text-xs text-[#A0A0A0] leading-relaxed mt-1">
+          왼쪽에서 응원팀, 방문일, 인원, 예산, 선호도를 선택하고
           <br />
-          {'"좌석 추천받기"'}를 누르면 오늘 앉기 좋은 자리를 알려드려요.
+          <strong className="text-white">{'[조건으로 좌석 추천받기]'}</strong>를 누르면 100% 공식 기준 최적 TOP 3를 큐레이션합니다.
         </EmptyDescription>
       </EmptyHeader>
     </Empty>

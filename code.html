@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KIA Tigers Seat Scout - 당신의 완벽한 직관을 위한 단 하나의 스카우트</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#1b1b1b",
+                        "surface-container-highest": "#333535",
+                        "outline-variant": "#5c3f3f",
+                        "secondary": "#c6c6c6",
+                        "on-primary-fixed": "#410008",
+                        "on-secondary-fixed-variant": "#474747",
+                        "surface-container-lowest": "#0c0f0f",
+                        "surface": "#121414",
+                        "tertiary-fixed": "#e5e2e1",
+                        "on-secondary": "#303030",
+                        "tertiary": "#c8c6c5",
+                        "on-primary-fixed-variant": "#92001f",
+                        "surface-container": "#1e2020",
+                        "on-tertiary-container": "#e1dede",
+                        "surface-variant": "#333535",
+                        "primary-container": "#c7012e",
+                        "tertiary-container": "#636262",
+                        "inverse-surface": "#e2e2e2",
+                        "on-tertiary": "#313030",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed": "#ffdad9",
+                        "error-container": "#93000a",
+                        "surface-bright": "#37393a",
+                        "inverse-primary": "#bf002c",
+                        "on-surface-variant": "#e5bdbc",
+                        "outline": "#ac8887",
+                        "surface-container-low": "#1a1c1c",
+                        "secondary-fixed": "#e2e2e2",
+                        "on-secondary-container": "#b5b5b5",
+                        "surface-container-high": "#282a2b",
+                        "primary-fixed-dim": "#ffb3b2",
+                        "action-red-hover": "#e60035",
+                        "surface-tint": "#ffb3b2",
+                        "background": "#121414",
+                        "on-error": "#690005",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "secondary-fixed-dim": "#c6c6c6",
+                        "stadium-grey": "#2d2d2d",
+                        "surface-dim": "#121414",
+                        "on-surface": "#e2e2e2",
+                        "primary": "#ffb3b2",
+                        "field-surface": "#0f0f0f",
+                        "secondary-container": "#474747",
+                        "inverse-on-surface": "#2f3131",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "on-tertiary-fixed-variant": "#474746",
+                        "on-primary": "#680013",
+                        "on-primary-container": "#ffd6d4",
+                        "on-background": "#e2e2e2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "80px",
+                        "base": "8px",
+                        "gutter": "24px",
+                        "section-gap": "120px",
+                        "margin-mobile": "20px"
+                    },
+                    "fontFamily": {
+                        "label-bold": ["Inter"],
+                        "display-xl": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-xl-mobile": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-bold": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "display-xl": ["84px", { "lineHeight": "90px", "letterSpacing": "-0.04em", "fontWeight": "900" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-xl-mobile": ["48px", { "lineHeight": "52px", "letterSpacing": "-0.03em", "fontWeight": "900" }],
+                        "headline-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["32px", { "lineHeight": "40px", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .gradient-overlay {
+            background: linear-gradient(180deg, rgba(18, 20, 20, 0.2) 0%, rgba(18, 20, 20, 1) 100%);
+        }
+        .hero-glow {
+            background: radial-gradient(circle at 50% 50%, rgba(199, 1, 46, 0.15) 0%, rgba(18, 20, 20, 0) 70%);
+        }
+        .card-hover:hover {
+            box-shadow: 0 0 20px rgba(199, 1, 46, 0.2);
+            border-color: rgba(199, 1, 46, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased overflow-x-hidden selection:bg-primary-container selection:text-white">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-background/90 backdrop-blur-md dark:bg-background/90 border-b border-white/10 shadow-md">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 w-full">
+<a class="font-headline-md text-headline-md font-black text-primary dark:text-primary uppercase tracking-tighter" href="#">
+                KIA Tigers Seat Scout
+            </a>
+<div class="hidden md:flex items-center space-x-gutter">
+<a class="font-label-bold text-label-bold uppercase tracking-wider text-on-surface hover:text-primary transition-colors" href="#">Stadium Map</a>
+<a class="font-label-bold text-label-bold uppercase tracking-wider text-on-surface hover:text-primary transition-colors" href="#">Pricing</a>
+<a class="font-label-bold text-label-bold uppercase tracking-wider text-on-surface hover:text-primary transition-colors" href="#">Guide</a>
+<button class="bg-primary-container text-white font-label-bold text-label-bold uppercase px-8 py-3 rounded hover:bg-action-red-hover hover:text-white transition-all duration-300 transform active:scale-95 shadow-[0_0_15px_rgba(199,1,46,0.4)]">
+                    Start Scout
+                </button>
+</div>
+<!-- Mobile Menu Button -->
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined" style="font-size: 32px;">menu</span>
+</button>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden">
+<!-- Background Image -->
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-cover bg-center opacity-40" data-alt="A breathtaking, wide-angle cinematic shot of a modern baseball stadium at night, brilliantly illuminated by floodlights against a dark sky. The scene is hyper-realistic with high contrast, emphasizing deep black shadows and vibrant red accents on the stadium seating and structure. The atmosphere is electric, commanding, and energetic, perfectly capturing the anticipation of a major sporting event in a premium, high-end visual style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBWVAGZcP0QLHZXJVx7vr_uGeMxPrkwOI63JTVkED1DXp8CPeVxO8B73_jBjDD7I3_ehIuxs9HRqDS2MjvArLISix60oWu3Rj1AowAJGELX4MO7Bx9dsvqU4Z0UQ5x5wP4Zwf-cFSoJY-ajZHGaV5a1dDQlAUBlOcVWL8eof01gnI18fKWlvzwPqn8U8EdCpFuWQIF1eZNwvfme6dNAWrZsvuQ6Z4vQHItPCmgCtMrN4gvN4ZIWEPY6')"></div>
+<div class="absolute inset-0 gradient-overlay"></div>
+<div class="absolute inset-0 hero-glow"></div>
+</div>
+<div class="relative z-10 text-center px-margin-mobile md:px-margin-desktop max-w-5xl mx-auto flex flex-col items-center">
+<span class="inline-block py-1 px-3 border border-primary/30 rounded-full text-primary font-label-bold text-label-bold mb-6 tracking-widest bg-primary-container/10 backdrop-blur-sm">
+                OFFICIAL FAN CONCIERGE
+            </span>
+<h1 class="font-display-xl-mobile md:font-display-xl text-display-xl-mobile md:text-display-xl text-white mb-6 leading-tight drop-shadow-2xl">
+                당신의 완벽한 직관을 위한<br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-action-red-hover">단 하나의 스카우트</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-10 opacity-90">
+                예산, 인원, 선호도만 입력하면 AI가 찾아주는 챔피언스 필드 최적의 좌석 TOP 3. 복잡한 예매 전쟁에서 벗어나 당신만의 명당을 확보하세요.
+            </p>
+<button class="bg-primary-container text-white font-headline-md text-headline-md md:text-[24px] uppercase px-12 py-5 rounded-lg hover:bg-action-red-hover transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(199,1,46,0.6)] flex items-center gap-3 group">
+                내 좌석 찾으러 가기
+                <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">arrow_forward</span>
+</button>
+</div>
+</header>
+<!-- Why Seat Scout? Section -->
+<section class="py-section-gap px-margin-mobile md:px-margin-desktop relative bg-surface-container-lowest">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-white mb-4">Why Seat Scout?</h2>
+<div class="w-24 h-1 bg-primary-container mx-auto rounded-full"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Feature 1 -->
+<div class="bg-surface-container-low p-8 rounded-xl border border-white/5 card-hover transition-all duration-300 group relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/5 rounded-bl-full -z-10 group-hover:bg-primary-container/10 transition-colors"></div>
+<span class="material-symbols-outlined text-primary text-5xl mb-6" style="font-variation-settings: 'FILL' 1;">calculate</span>
+<h3 class="font-headline-md text-headline-md text-white text-[24px] mb-3">정확한 가격</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                        평일/주말 및 경기 등급에 따른 최신 예매 데이터를 실시간으로 반영하여 숨겨진 수수료 없이 100% 정확한 예상 금액을 계산합니다.
+                    </p>
+</div>
+<!-- Feature 2 -->
+<div class="bg-surface-container-low p-8 rounded-xl border border-white/5 card-hover transition-all duration-300 group relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/5 rounded-bl-full -z-10 group-hover:bg-primary-container/10 transition-colors"></div>
+<span class="material-symbols-outlined text-primary text-5xl mb-6" style="font-variation-settings: 'FILL' 1;">target</span>
+<h3 class="font-headline-md text-headline-md text-white text-[24px] mb-3">맞춤형 추천</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                        응원팀, 선호하는 관람 스타일(시야 집중/열띤 응원/편의시설 인접)을 AI가 정밀 분석하여 당신만의 맞춤형 좌석 랭킹을 제공합니다.
+                    </p>
+</div>
+<!-- Feature 3 -->
+<div class="bg-surface-container-low p-8 rounded-xl border border-white/5 card-hover transition-all duration-300 group relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/5 rounded-bl-full -z-10 group-hover:bg-primary-container/10 transition-colors"></div>
+<span class="material-symbols-outlined text-primary text-5xl mb-6" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<h3 class="font-headline-md text-headline-md text-white text-[24px] mb-3">시각적 확신</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                        단순한 좌석표가 아닙니다. 가기 전에 미리 확인하는 3D 구역별 뷰와 상세 정보를 통해 실패 없는 예매를 도와드립니다.
+                    </p>
+</div>
+</div>
+</div>
+</section>
+<!-- How it Works Section -->
+<section class="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface relative border-y border-white/5">
+<div class="max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row items-center gap-16">
+<div class="w-full md:w-1/2">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-white mb-6">
+                        단 3단계,<br/>
+                        완벽한 좌석을 찾는 법
+                    </h2>
+<div class="space-y-8 mt-12">
+<!-- Step 1 -->
+<div class="flex gap-6 items-start opacity-100 transition-opacity duration-300">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center font-headline-md text-white shrink-0 shadow-[0_0_15px_rgba(199,1,46,0.5)]">1</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-[20px] text-white mb-2">조건 입력</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">예산, 인원, 선호하는 관람 스타일을 선택합니다.</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flex gap-6 items-start opacity-60 hover:opacity-100 transition-opacity duration-300">
+<div class="w-12 h-12 rounded-full border border-primary text-primary flex items-center justify-center font-headline-md shrink-0">2</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-[20px] text-white mb-2">AI 분석 및 추천</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">수만 건의 데이터를 바탕으로 최적의 블록 TOP 3를 제안합니다.</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="flex gap-6 items-start opacity-60 hover:opacity-100 transition-opacity duration-300">
+<div class="w-12 h-12 rounded-full border border-primary text-primary flex items-center justify-center font-headline-md shrink-0">3</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-[20px] text-white mb-2">시야 확인 및 결정</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">추천받은 좌석의 예상 시야를 확인하고 예매를 준비합니다.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="w-full md:w-1/2 relative h-[500px] bg-surface-container-low rounded-xl border border-white/10 overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 bg-cover bg-center opacity-80 mix-blend-luminosity" data-alt="A highly detailed, futuristic 3D visualization interface of a baseball stadium seating chart displayed on a dark, sleek glassmorphism dashboard. The glowing red highlights emphasize a specific premium seating zone near the home plate. The visual style is commanding and precision-oriented, using a high-contrast dark theme with sharp, clean lines and subtle grid patterns to convey tactical, scout-like data analysis." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAbBxOe-GjExF4nWjQMHlvq6gNP0AnyeBzrK1okGk77Ud8SYcC9oUQHprAi6Yo5t6vaml9Pqv7Dz09-EAZpDv4HqDB7H_Fusnx9W6oehxRU4Hb-KAV9ScO-qdD3mrRYhmKvVBBL8bxLzfN5yGD8GQXMOmqfPoNRa6gcm35XXM1cPVWcBKa5NOgGe9IzEGlx801xt7zl3kOc0cajo3jq_80zHbrlzKUqO7I4tBftIhJWU6sJTye4iHMc')"></div>
+<!-- Decorative UI Elements Overlay -->
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+<div class="absolute bottom-8 left-8 right-8 bg-surface-container/90 backdrop-blur border border-white/10 p-6 rounded-lg shadow-2xl">
+<div class="flex justify-between items-center mb-2">
+<span class="text-primary font-label-bold text-label-bold uppercase tracking-widest">Selected Zone</span>
+<span class="text-white font-label-bold">K3 Block 115</span>
+</div>
+<div class="h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-[85%]"></div>
+</div>
+<div class="mt-2 text-right text-on-surface-variant text-sm font-label-bold">85% Match Rate</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Secondary CTA -->
+<section class="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface-container-lowest relative overflow-hidden">
+<div class="absolute inset-0 hero-glow opacity-50"></div>
+<div class="max-w-4xl mx-auto text-center relative z-10">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-white mb-8 leading-tight">
+                준비되셨나요?<br/>
+                지금 바로 최고의 명당을 예약하세요.
+            </h2>
+<button class="bg-primary-container text-white font-headline-md text-headline-md md:text-[24px] uppercase px-12 py-5 rounded-lg hover:bg-action-red-hover transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(199,1,46,0.4)]">
+                스카우트 시작하기
+            </button>
+</div>
+</section>
+<!-- Footer -->
+<footer class="w-full bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-white/5 flex flex-col md:flex-row justify-between items-center px-margin-mobile md:px-margin-desktop py-12">
+<div class="mb-6 md:mb-0">
+<span class="font-headline-lg text-headline-lg font-black text-primary dark:text-primary tracking-tighter">
+                KIA Tigers Seat Scout
+            </span>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">
+                © 2024 KIA Tigers Seat Scout. Official Fan Partner. All rights reserved.
+            </p>
+</div>
+<div class="flex flex-wrap gap-6 justify-center">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-white hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary rounded px-1" href="#">Stadium Info</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-white hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary rounded px-1" href="#">Privacy Policy</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-white hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary rounded px-1" href="#">Terms of Service</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-white hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary rounded px-1" href="#">Contact Support</a>
+</div>
+</footer>
+</body></html>

@@ -2,6 +2,8 @@
 
 import { useRef, useState } from 'react'
 import { AppHeader } from '@/components/app-header'
+import { LandingHero } from '@/components/landing-hero'
+import { AppFooter } from '@/components/app-footer'
 import { InputSection, type FieldRefs } from '@/components/input-section'
 import { SeatResultCard, type AiEnhancedData } from '@/components/seat-result-card'
 import { ResultEmptyState } from '@/components/result-empty-state'
@@ -108,6 +110,14 @@ export default function Page() {
     }
   }
 
+  const scrollToInput = () => {
+    inputTopRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  const focusBudget = () => {
+    scrollToField(budgetRef)
+  }
+
   // Gemini AI 백엔드 비동기 호출
   const fetchAiReasons = async (
     input: RecommendInput,
@@ -165,7 +175,7 @@ export default function Page() {
       console.error('[Timeout] 좌석 추천 연산 시간이 15초를 초과하여 실패 처리되었습니다.')
     }, 15000)
 
-    // 1단계: 룰 기반 초고속 연산 (자연스러운 체감을 위한 미세 지연 후 렌더링)
+    // 1단계: 룰 기반 초고속 연산 (0.6초 자연스러운 인터랙션 후 렌더링)
     window.setTimeout(() => {
       try {
         clearTimeout(timeoutId)
@@ -217,14 +227,6 @@ export default function Page() {
     }
     setSubmittedInput(input)
     runRecommendation(input)
-  }
-
-  const scrollToInput = () => {
-    inputTopRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
-  const focusBudget = () => {
-    scrollToField(budgetRef)
   }
 
   // 개발용 강제 상태 처리
@@ -298,7 +300,7 @@ export default function Page() {
                 variant="outline"
                 size="lg"
                 onClick={scrollToInput}
-                className="w-full cursor-pointer font-bold border-border/80 hover:bg-accent"
+                className="w-full cursor-pointer font-bold border-white/10 hover:bg-white/5 rounded-[4px]"
               >
                 <ArrowUp data-icon="inline-start" className="size-4" />
                 조건 바꿔서 다시 추천받기
@@ -319,15 +321,28 @@ export default function Page() {
       effectiveStatus === 'no-data')
 
   return (
-    <main className="min-h-dvh bg-background pb-20">
-      <AppHeader />
+    <main className="min-h-dvh bg-[#121414] pb-24 text-white">
+      {/* 글로벌 상단 헤더 */}
+      <AppHeader onCtaClick={scrollToInput} />
 
+      {/* 랜딩 히어로 & 서비스 소개 섹션 */}
+      <LandingHero onStartRecommendation={scrollToInput} />
+
+      {/* 실제 서비스 인입 영역 (1200px 와이드 그리드) */}
       <div
         ref={inputTopRef}
-        className="mx-auto grid w-full max-w-5xl grid-cols-1 gap-6 px-5 py-8 md:grid-cols-12 md:px-8 md:py-10 md:scroll-mt-4"
+        className="mx-auto grid w-full max-w-[1200px] grid-cols-1 gap-8 px-5 py-10 md:grid-cols-12 md:px-8 md:py-14 md:scroll-mt-16"
       >
-        {/* 입력 (왼쪽) */}
-        <section className="md:col-span-5" aria-label="좌석 조건 입력">
+        {/* 입력 섹션 (왼쪽) */}
+        <section className="md:col-span-5 flex flex-col gap-3" aria-label="좌석 조건 입력">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="flex size-6 items-center justify-center rounded-[4px] bg-[#C7012E] text-xs font-black text-white">
+              STEP
+            </span>
+            <h2 className="text-xl font-bold tracking-tight text-white">
+              직관 조건 설정
+            </h2>
+          </div>
           <InputSection
             values={values}
             errors={errors}
@@ -338,34 +353,46 @@ export default function Page() {
           />
         </section>
 
-        {/* 결과 (오른쪽, sticky) */}
+        {/* 결과 섹션 (오른쪽, sticky) */}
         <section
           ref={resultRef}
           aria-label="추천 결과"
           aria-live="polite"
           className="md:col-span-7"
         >
-          <div className="flex flex-col gap-4 md:sticky md:top-4">
+          <div className="flex flex-col gap-4 md:sticky md:top-20">
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-bold tracking-tight text-foreground">추천 결과</h2>
+                <div className="flex items-center gap-2">
+                  <span className="flex size-6 items-center justify-center rounded-[4px] bg-[#1a1c1c] border border-white/10 text-xs font-bold text-[#A0A0A0]">
+                    TOP 3
+                  </span>
+                  <h2 className="text-xl font-bold tracking-tight text-white">
+                    맞춤 좌석 큐레이션 결과
+                  </h2>
+                </div>
                 {effectiveStatus === 'success' && (
                   <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-semibold text-primary">
-                      TOP 3 · 맞춤 추천 순
+                    <span className="text-xs font-semibold text-[#00E676]">
+                      매칭 완료
                     </span>
                     {isAiLoading && (
-                      <span className="text-[11px] text-muted-foreground animate-pulse">
-                        (AI 분석 중...)
+                      <span className="text-[11px] text-[#A0A0A0] animate-pulse">
+                        · AI 전술 팁 분석 중...
                       </span>
                     )}
                   </div>
                 )}
               </div>
+
               {showSummary && summaryInput && (
                 <div className="flex flex-wrap gap-1.5 animate-in fade-in-50">
                   {summaryChips(summaryInput).map((chip, i) => (
-                    <Badge key={i} variant="secondary" className="tnum font-medium">
+                    <Badge
+                      key={i}
+                      variant="secondary"
+                      className="tnum font-medium rounded-[4px] border border-white/10 bg-[#1a1c1c] text-[#FFFFFF]"
+                    >
                       {chip}
                     </Badge>
                   ))}
@@ -379,6 +406,9 @@ export default function Page() {
       </div>
 
       <DevStateToggle forced={forced} onForce={handleForce} />
+
+      {/* 글로벌 푸터 */}
+      <AppFooter onCtaClick={scrollToInput} />
     </main>
   )
 }
